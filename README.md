@@ -5,6 +5,6 @@
 ## Features
 
 - 🆕 Create new investment portfolios  
-- 📈 Add and manage tickers within your portfolios  
+- 📈 Add and manage stocks within your portfolios  
 - 💰 Calculate portfolio value, dividends, and investment performance  
 - 🗄️ Integrated with **SQLite** database for smooth data handling  
