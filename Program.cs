@@ -1,6 +1,5 @@
+using PortfolioTracker.PortfolioDbContext;
 using PortfolioTracker.Service;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var logger = LoggerFactory.Create(logging => logging.AddConsole()).CreateLogger<DataFetcherService>();
@@ -10,6 +9,9 @@ var dataFetcher = new DataFetcherService(logger, configuration);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<PortfolioService>();
+builder.Services.AddScoped<PortfolioTickerService>();
+builder.Services.AddDbContext<PortfolioTrackerContext>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -25,7 +27,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await dataFetcher.FetchAllAvaliableTickers();
+dataFetcher.FetchAllAvaliableTickers();
 
 app.Run();
 

@@ -47,14 +47,13 @@ namespace PortfolioTracker.Service
                         };
                         context.tickers.Add(newTicker);
                         await context.SaveChangesAsync();
-                        await Task.Delay(TimeSpan.FromSeconds(10)); // wait so the we dont get 429
+                        await Task.Delay(TimeSpan.FromSeconds(3)); // wait so the we dont get 429
                     }
                     else
                     {
                         _logger.LogInformation($"ticker {item} has been already saved");
                     }
                 }
-                context.Dispose();
             }
             else
             {
