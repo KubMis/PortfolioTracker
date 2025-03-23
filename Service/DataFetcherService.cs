@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using PortfolioTracker.Model;
+﻿using PortfolioTracker.Model;
 using PortfolioTracker.PortfolioDbContext;
 using System.Globalization;
 using System.Text.Json.Nodes;
