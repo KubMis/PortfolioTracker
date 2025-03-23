@@ -11,7 +11,7 @@ using PortfolioTracker.PortfolioDbContext;
 namespace PortfolioTracker.Migrations
 {
     [DbContext(typeof(PortfolioTrackerContext))]
-    [Migration("20250322212406_InitialCreate")]
+    [Migration("20250323213451_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -26,20 +26,23 @@ namespace PortfolioTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("DividendYield")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExpectedDividendAmount")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("expectedDividendAmount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("portfolioName")
+                    b.Property<string>("PortfolioName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("result")
+                    b.Property<decimal>("Result")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("totalValue")
+                    b.Property<decimal>("TotalValue")
                         .HasColumnType("TEXT");
 
                     b.HasKey("PortfolioId");
@@ -59,11 +62,18 @@ namespace PortfolioTracker.Migrations
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("NumberOfShares")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PortfolioId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TickerId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TickerSymbol")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("PortfolioTickerId");
 
@@ -106,7 +116,7 @@ namespace PortfolioTracker.Migrations
             modelBuilder.Entity("PortfolioTracker.Model.PortfolioTicker", b =>
                 {
                     b.HasOne("PortfolioTracker.Model.Portfolio", null)
-                        .WithMany("tickerList")
+                        .WithMany("TickerList")
                         .HasForeignKey("PortfolioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -114,7 +124,7 @@ namespace PortfolioTracker.Migrations
 
             modelBuilder.Entity("PortfolioTracker.Model.Portfolio", b =>
                 {
-                    b.Navigation("tickerList");
+                    b.Navigation("TickerList");
                 });
 #pragma warning restore 612, 618
         }

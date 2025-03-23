@@ -17,10 +17,11 @@ namespace PortfolioTracker.Migrations
                 {
                     PortfolioId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    totalValue = table.Column<decimal>(type: "TEXT", nullable: false),
-                    expectedDividendAmount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    portfolioName = table.Column<string>(type: "TEXT", nullable: false),
-                    result = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalValue = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ExpectedDividendAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DividendYield = table.Column<decimal>(type: "TEXT", nullable: false),
+                    PortfolioName = table.Column<string>(type: "TEXT", nullable: false),
+                    Result = table.Column<decimal>(type: "TEXT", nullable: false),
                     LastUpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -53,6 +54,8 @@ namespace PortfolioTracker.Migrations
                     PortfolioTickerId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     TickerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TickerSymbol = table.Column<string>(type: "TEXT", nullable: false),
+                    NumberOfShares = table.Column<int>(type: "INTEGER", nullable: false),
                     LastUpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     AverageSharePirce = table.Column<decimal>(type: "TEXT", nullable: false),
                     PortfolioId = table.Column<int>(type: "INTEGER", nullable: false)
