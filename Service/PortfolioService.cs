@@ -46,18 +46,18 @@ namespace PortfolioTracker.Service
 
         }
 
-        private async Task<decimal> CalculatePortfolioDividendAmount(List<PortfolioTickerDto> portfolioTickers)
+        public async Task<decimal> CalculatePortfolioDividendAmount(List<PortfolioTickerDto> portfolioTickers)
         {
             decimal result = 0.0m;
             foreach (var item in portfolioTickers)
             {
                 var dividendAmount = _context.tickers.FirstOrDefault(t => t.TickerSymbol == item.TickerSymbol).DividendPerShare;
-                result += dividendAmount;
+                result += dividendAmount * item.NumberOfShares;
             }
             return result;
         }
 
-        private async Task<decimal> CalculatePortfolioDividendYield(List<PortfolioTickerDto> portfolioTickers)
+        public async Task<decimal> CalculatePortfolioDividendYield(List<PortfolioTickerDto> portfolioTickers)
         {
             decimal result = 0.0m;
             foreach (var ticker in portfolioTickers)
@@ -69,18 +69,18 @@ namespace PortfolioTracker.Service
             return result / portfolioTickers.Count();
         }
 
-        private async Task<decimal> CalculatePortfolioResult(List<PortfolioTickerDto> portfolioTickers)
+        public async Task<decimal> CalculatePortfolioResult(List<PortfolioTickerDto> portfolioTickers)
         {
             decimal result = 0.0m;
             foreach (var ticker in portfolioTickers)
             {
                 var currentSharePrice = _context.tickers.FirstOrDefault(x => x.TickerSymbol.Equals(ticker.TickerSymbol)).SharePrice;
-                result += currentSharePrice - ticker.AverageSharePrice;
+                result += (currentSharePrice - ticker.AverageSharePrice) * ticker.NumberOfShares;
             }
             return result;
         }
 
-        private async Task<decimal> CalculatePortfolioValue(List<PortfolioTickerDto> portfolioTickers)
+        public async Task<decimal> CalculatePortfolioValue(List<PortfolioTickerDto> portfolioTickers)
         {
             decimal result = 0.0m;
             foreach (var ticker in portfolioTickers)
