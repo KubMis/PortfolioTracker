@@ -33,6 +33,51 @@ namespace PortfolioTracker.Tests
         }
 
         [Fact]
+        public async Task CreatePortfolio_ShouldCreatePortfolioSuccessfully()
+        {
+            // Arrange
+            var portfolioDto = new PortfolioDto
+            {
+                PortfolioName = "New Portfolio",
+                TickerList = new List<PortfolioTickerDto>
+                {
+                    new PortfolioTickerDto
+                    {
+                        AverageSharePrice = 100,
+                        NumberOfShares = 10,
+                        TickerSymbol = "A"
+                    },
+                    new PortfolioTickerDto
+                    {
+                        AverageSharePrice = 200,
+                        NumberOfShares = 5,
+                        TickerSymbol = "B"
+                    }
+                }
+            };
+
+            _context.tickers.AddRange(
+                new Ticker { TickerSymbol = "A", DividendYield = 0.05m, DividendPerShare = 2, CompanyName = "Test" },
+                new Ticker { TickerSymbol = "B", DividendYield = 0.10m, DividendPerShare = 1.5m, CompanyName = "Test2" }
+            );
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _service.CreatePortfolio(portfolioDto);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("New Portfolio", result.PortfolioName);
+            Assert.Equal(2, result.TickerList.Count);
+            Assert.Equal(100, result.TickerList[0].AverageSharePirce);
+            Assert.Equal(10, result.TickerList[0].NumberOfShares);
+            Assert.Equal("A", result.TickerList[0].TickerSymbol);
+            Assert.Equal(200, result.TickerList[1].AverageSharePirce);
+            Assert.Equal(5, result.TickerList[1].NumberOfShares);
+            Assert.Equal("B", result.TickerList[1].TickerSymbol);
+        }
+
+        [Fact]
         public async Task CalculatePortfolioValue_ShouldReturnCorrectValue_ForSingleStock()
         {
             //Arrange

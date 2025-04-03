@@ -35,5 +35,18 @@ namespace PortfolioTracker.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPortfolioById([FromQuery] int id)
+        {
+            var portfolio = await _portfolioService.GetPortfolioById(id);
+            return portfolio != null ? Ok(portfolio) : NotFound();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeletePortfolioById([FromQuery] int id)
+        {
+             return await _portfolioService.RemovePortfolioById(id);
+        }
     }
 }
