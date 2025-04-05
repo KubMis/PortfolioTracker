@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PortfolioTracker.Model;
 using PortfolioTracker.PortfolioDbContext;
@@ -90,7 +91,7 @@ namespace PortfolioTracker.Service
             _context.Add(newPortfolio);
 
             var tickers = await _portfolioTickerService
-                .CreatePortfolioTickerFromDto(portfolioDto.TickerList, newPortfolio.PortfolioId);
+                .CreatePortfolioTickerFromDtosList(portfolioDto.TickerList, newPortfolio.PortfolioId);
 
             newPortfolio.TickerList.AddRange(tickers);
 
@@ -138,6 +139,86 @@ namespace PortfolioTracker.Service
             {
                 _logger.LogWarning("Portfolio with ID: {PortfolioId} not found.", id);
                 return new NotFoundResult();
+            }
+        }
+
+        public async Task<ActionResult> RemoveTickersFromPortfolio(int portfolioId, List<string> tickerSymbols)
+        {
+            var portfolio = _context.portfolios.FirstOrDefault(x => x.PortfolioId == portfolioId);
+            if (portfolio == null)
+            {
+                return new BadRequestResult();
+            }
+            else
+            {
+                foreach (var ticker in tickerSymbols)
+                {
+                    var tickerToRemove = portfolio.TickerList.FirstOrDefault(x => x.TickerSymbol == ticker.ToUpper());
+                    
+                    if (tickerToRemove != null)
+                    {
+                        portfolio.TickerList.Remove(tickerToRemove);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return new OkResult();
+            }
+        }
+
+        public async Task<ActionResult> AddNewTickersToPortfolio(int portfolioId, List<PortfolioTickerDto> dtos)
+        {
+            var portfolio = _context.portfolios.FirstOrDefault(x => x.PortfolioId == portfolioId);
+
+            if (portfolio == null)
+            {
+                return new BadRequestResult();
+            }
+            else
+            {
+                List<PortfolioTicker> newTickers = new List<PortfolioTicker>();
+                foreach (var dto in dtos)
+                {
+                    if (!_portfolioTickerService.IsPortfolioTickerDtoValid(dto))
+                    {
+                        return new BadRequestResult();
+                    }
+
+                    var newTicker = await _portfolioTickerService.CreatePortfolioTickerFromDto(dto, portfolioId);
+                    newTickers.Add(newTicker);
+                }
+                portfolio.TickerList.AddRange(newTickers);
+                await _context.SaveChangesAsync();
+                return new OkResult();
+            }
+        }
+
+        public async Task<ActionResult> UpdatePortfolioTickers(int portfolioId, List<PortfolioTickerDto> portfolioTickerDtos)
+        {
+            var portfolio = _context.portfolios.FirstOrDefault(x => x.PortfolioId == portfolioId);
+
+            if (portfolio == null)
+            {
+                return new BadRequestResult();
+            }
+            else
+            {
+                foreach (var dto in portfolioTickerDtos)
+                {
+                    if (!_portfolioTickerService.IsPortfolioTickerDtoValid(dto))
+                    {
+                        return new BadRequestResult();
+                    }
+
+                    var existingTicker = portfolio.TickerList.FirstOrDefault(x => x.TickerSymbol == dto.TickerSymbol);
+                    if (!(existingTicker == null))
+                    {
+                        existingTicker.LastUpdateDate = DateTime.UtcNow;
+                        existingTicker.NumberOfShares = dto.NumberOfShares;
+                        existingTicker.AverageSharePirce = dto.AverageSharePrice;
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return new OkResult();
             }
         }
     }
