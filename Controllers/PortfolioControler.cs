@@ -32,7 +32,7 @@ namespace PortfolioTracker.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest("Error creating portfolio: " + ex.Message);
             }
         }
 

@@ -68,7 +68,7 @@ namespace PortfolioTracker.Service
             return result;
         }
 
-         public async Task<Portfolio> CreatePortfolio(PortfolioDto portfolioDto)
+        public async Task<Portfolio> CreatePortfolio(PortfolioDto portfolioDto)
         {
             _logger.LogInformation("Creating new portfolio with name: {PortfolioName}", portfolioDto.PortfolioName);
             var totalValue = await CalculatePortfolioValue(portfolioDto.TickerList);
@@ -89,7 +89,7 @@ namespace PortfolioTracker.Service
 
             _logger.LogInformation("Object created");
             _context.Add(newPortfolio);
-
+            
             var tickers = await _portfolioTickerService
                 .CreatePortfolioTickerFromDtosList(portfolioDto.TickerList, newPortfolio.PortfolioId);
 
@@ -100,12 +100,11 @@ namespace PortfolioTracker.Service
             _logger.LogInformation("Portfolio created successfully with ID: {PortfolioId}", newPortfolio.PortfolioId);
 
             return newPortfolio;
-
         }
 
         public async Task<Portfolio> GetPortfolioById(int id)
-        {
-            return  _context.portfolios.FirstOrDefault(x => x.PortfolioId == id);
+        {   
+             return _context.portfolios.Include(x=>x.TickerList).FirstOrDefault(x => x.PortfolioId == id);
         }
 
         public bool IsPortfolioDtoValid(PortfolioDto portfolioDto)

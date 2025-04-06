@@ -31,7 +31,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dataFetcher = scope.ServiceProvider.GetRequiredService<DataFetcherService>();
-    await dataFetcher.FetchAllAvaliableTickers();
+    dataFetcher.FetchAllAvaliableTickers();
 }
 
 app.Run();

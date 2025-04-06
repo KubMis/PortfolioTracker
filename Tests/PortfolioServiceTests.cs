@@ -78,6 +78,40 @@ namespace PortfolioTracker.Tests
             Assert.Equal(0.075m, result.DividendYield);
             Assert.Equal(1.75m, result.ExpectedDividendAmount);
         }
+        
+        [Fact]
+        public async Task GetPortfolioById_ShouldReturnPortfolio_WhenPortfolioExists()
+        {
+            // Arrange
+            var portfolio = new Portfolio
+            {
+                PortfolioName = "Test Portfolio",
+                TickerList = new List<PortfolioTicker>
+                {
+                    new PortfolioTicker
+                    {
+                        AverageSharePirce = 100,
+                        NumberOfShares = 10,
+                        TickerSymbol = "A"
+                    }
+                }
+            };
+
+            _context.portfolios.Add(portfolio);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _service.GetPortfolioById(portfolio.PortfolioId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(result.PortfolioId, portfolio.PortfolioId);
+            Assert.Equal(result.PortfolioName, portfolio.PortfolioName);
+            Assert.Equal(result.TickerList.Count, portfolio.TickerList.Count);
+            Assert.Equal(result.TickerList[0].AverageSharePirce, portfolio.TickerList[0].AverageSharePirce);
+            Assert.Equal(result.TickerList[0].NumberOfShares, portfolio.TickerList[0].NumberOfShares);
+            Assert.Equal(result.TickerList[0].TickerSymbol, portfolio.TickerList[0].TickerSymbol);
+        }
 
         [Fact]
         public async Task CalculatePortfolioValue_ShouldReturnCorrectValue_ForSingleStock()

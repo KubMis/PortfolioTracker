@@ -365,3 +365,4 @@ FodyWeavers.xsd
 
 /*.db
 /appsettings.json
+/identifier.sqlite
