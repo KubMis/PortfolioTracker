@@ -75,6 +75,8 @@ namespace PortfolioTracker.Tests
             Assert.Equal(200, result.TickerList[1].AverageSharePirce);
             Assert.Equal(5, result.TickerList[1].NumberOfShares);
             Assert.Equal("B", result.TickerList[1].TickerSymbol);
+            Assert.Equal(0.075m, result.DividendYield);
+            Assert.Equal(1.75m, result.ExpectedDividendAmount);
         }
 
         [Fact]
