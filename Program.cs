@@ -1,18 +1,20 @@
+using Microsoft.EntityFrameworkCore;
 using PortfolioTracker.PortfolioDbContext;
 using PortfolioTracker.Service;
 
 var builder = WebApplication.CreateBuilder(args);
-var logger = LoggerFactory.Create(logging => logging.AddConsole()).CreateLogger<DataFetcherService>();
 var configuration = builder.Configuration;
-var dataFetcher = new DataFetcherService(logger, configuration);
+var folder = Environment.SpecialFolder.LocalApplicationData;
+var path = Environment.GetFolderPath(folder);
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<PortfolioTrackerContext>(options =>
+    options.UseSqlite($"Data Source={Path.Join(path, "PortfolioTracker.db")}"));
 builder.Services.AddScoped<PortfolioService>();
 builder.Services.AddScoped<PortfolioTickerService>();
-builder.Services.AddDbContext<PortfolioTrackerContext>();
-builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<DataFetcherService>();
 
 var app = builder.Build();
 
@@ -24,10 +26,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
 
-dataFetcher.FetchAllAvaliableTickers();
+using (var scope = app.Services.CreateScope())
+{
+    var dataFetcher = scope.ServiceProvider.GetRequiredService<DataFetcherService>();
+    dataFetcher.FetchAllAvaliableTickers();
+}
 
 app.Run();
-

@@ -13,6 +13,7 @@ namespace PortfolioTracker.Tests
         private readonly ILogger<PortfolioService> _logger;
         private readonly PortfolioTrackerContext _context;
         private readonly PortfolioTickerService _portfolioTickerService;
+        private readonly DataFetcherService _dataFetcherService = Substitute.For<DataFetcherService>();
 
         public void Dispose()
         {
@@ -29,7 +30,88 @@ namespace PortfolioTracker.Tests
 
             _context = new PortfolioTrackerContext(options);
             _portfolioTickerService = new PortfolioTickerService(_context);
-            _service = new PortfolioService(_logger, _context, _portfolioTickerService);
+            _service = new PortfolioService(_logger, _context, _portfolioTickerService, _dataFetcherService);
+        }
+
+        [Fact]
+        public async Task CreatePortfolio_ShouldCreatePortfolioSuccessfully()
+        {
+            // Arrange
+            var portfolioDto = new PortfolioDto
+            {
+                PortfolioName = "New Portfolio",
+                TickerList = new List<PortfolioTickerDto>
+                {
+                    new PortfolioTickerDto
+                    {
+                        AverageSharePrice = 100,
+                        NumberOfShares = 10,
+                        TickerSymbol = "A"
+                    },
+                    new PortfolioTickerDto
+                    {
+                        AverageSharePrice = 200,
+                        NumberOfShares = 5,
+                        TickerSymbol = "B"
+                    }
+                }
+            };
+
+            _context.tickers.AddRange(
+                new Ticker { TickerSymbol = "A", DividendYield = 0.05m, DividendPerShare = 2, CompanyName = "Test" },
+                new Ticker { TickerSymbol = "B", DividendYield = 0.10m, DividendPerShare = 1.5m, CompanyName = "Test2" }
+            );
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _service.CreatePortfolio(portfolioDto);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("New Portfolio", result.PortfolioName);
+            Assert.Equal(2, result.TickerList.Count);
+            Assert.Equal(100, result.TickerList[0].AverageSharePirce);
+            Assert.Equal(10, result.TickerList[0].NumberOfShares);
+            Assert.Equal("A", result.TickerList[0].TickerSymbol);
+            Assert.Equal(200, result.TickerList[1].AverageSharePirce);
+            Assert.Equal(5, result.TickerList[1].NumberOfShares);
+            Assert.Equal("B", result.TickerList[1].TickerSymbol);
+            Assert.Equal(0.075m, result.DividendYield);
+            Assert.Equal(27.5m, result.ExpectedDividendAmount);
+        }
+        
+        [Fact]
+        public async Task GetPortfolioById_ShouldReturnPortfolio_WhenPortfolioExists()
+        {
+            // Arrange
+            var portfolio = new Portfolio
+            {
+                PortfolioName = "Test Portfolio",
+                TickerList = new List<PortfolioTicker>
+                {
+                    new PortfolioTicker
+                    {
+                        AverageSharePirce = 100,
+                        NumberOfShares = 10,
+                        TickerSymbol = "A"
+                    }
+                }
+            };
+
+            _context.portfolios.Add(portfolio);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _service.GetPortfolioById(portfolio.PortfolioId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(result.PortfolioId, portfolio.PortfolioId);
+            Assert.Equal(result.PortfolioName, portfolio.PortfolioName);
+            Assert.Equal(result.TickerList.Count, portfolio.TickerList.Count);
+            Assert.Equal(result.TickerList[0].AverageSharePirce, portfolio.TickerList[0].AverageSharePirce);
+            Assert.Equal(result.TickerList[0].NumberOfShares, portfolio.TickerList[0].NumberOfShares);
+            Assert.Equal(result.TickerList[0].TickerSymbol, portfolio.TickerList[0].TickerSymbol);
         }
 
         [Fact]
