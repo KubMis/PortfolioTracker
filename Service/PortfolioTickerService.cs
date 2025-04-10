@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortfolioTracker.Model;
 using PortfolioTracker.PortfolioDbContext;
 

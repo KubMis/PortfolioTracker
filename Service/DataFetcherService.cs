@@ -2,6 +2,7 @@
 using PortfolioTracker.PortfolioDbContext;
 using System.Globalization;
 using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PortfolioTracker.Service
 {
@@ -41,9 +42,9 @@ namespace PortfolioTracker.Service
                         var newTicker = new Ticker()
                         {
                             CompanyName = companyNames[tickerSymbol.IndexOf(item)],
-                            DividendPerShare = await getNumericalInformationFromMetrics(item, "dividendPerShareAnnual"),
-                            DividendYield = await getNumericalInformationFromMetrics(item, "dividendYieldIndicatedAnnual"),
-                            SharePrice = await getCurrentSharePrice(item),
+                            DividendPerShare = await GetNumericalInformationFromMetrics(item, "dividendPerShareAnnual"),
+                            DividendYield = await GetNumericalInformationFromMetrics(item, "dividendYieldIndicatedAnnual"),
+                            SharePrice = await GetCurrentSharePrice(item),
                             TickerSymbol = item,
                             LastUpdateDate = DateTime.Now,
                         };
@@ -64,8 +65,8 @@ namespace PortfolioTracker.Service
 
             _logger.LogInformation("Fetching finished");
         }
-
-        private async Task<decimal> getNumericalInformationFromMetrics(string companyTicker, string information)
+        
+        private async Task<decimal> GetNumericalInformationFromMetrics(string companyTicker, string information)
         {
             var client = new HttpClient() { BaseAddress = new Uri(_configuration["FinnhubBaseUrl"]) };
             var response = await client.GetFromJsonAsync<JsonObject>($"/api/v1/stock/metric?symbol={companyTicker}&token="
@@ -74,7 +75,7 @@ namespace PortfolioTracker.Service
             return response["metric"][$"{information}"] != null ? decimal.Parse(response["metric"][$"{information}"].ToString(), CultureInfo.InvariantCulture) : 0.0m;
         }
 
-        private async Task<decimal> getCurrentSharePrice(string companyTicker)
+        public async Task<decimal> GetCurrentSharePrice(string companyTicker)
         {
             var client = new HttpClient() { BaseAddress = new Uri(_configuration["FinnhubBaseUrl"]) };
             var response = await client.GetFromJsonAsync<JsonObject>($"/api/v1/quote?&symbol={companyTicker}&token="

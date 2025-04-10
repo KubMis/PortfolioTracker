@@ -13,6 +13,7 @@ namespace PortfolioTracker.Tests
         private readonly ILogger<PortfolioService> _logger;
         private readonly PortfolioTrackerContext _context;
         private readonly PortfolioTickerService _portfolioTickerService;
+        private readonly DataFetcherService _dataFetcherService = Substitute.For<DataFetcherService>();
 
         public void Dispose()
         {
@@ -29,7 +30,7 @@ namespace PortfolioTracker.Tests
 
             _context = new PortfolioTrackerContext(options);
             _portfolioTickerService = new PortfolioTickerService(_context);
-            _service = new PortfolioService(_logger, _context, _portfolioTickerService);
+            _service = new PortfolioService(_logger, _context, _portfolioTickerService, _dataFetcherService);
         }
 
         [Fact]
@@ -76,7 +77,7 @@ namespace PortfolioTracker.Tests
             Assert.Equal(5, result.TickerList[1].NumberOfShares);
             Assert.Equal("B", result.TickerList[1].TickerSymbol);
             Assert.Equal(0.075m, result.DividendYield);
-            Assert.Equal(1.75m, result.ExpectedDividendAmount);
+            Assert.Equal(27.5m, result.ExpectedDividendAmount);
         }
         
         [Fact]
