@@ -13,7 +13,7 @@ namespace PortfolioTracker.Tests
         private readonly ILogger<PortfolioService> _logger;
         private readonly PortfolioTrackerContext _context;
         private readonly PortfolioTickerService _portfolioTickerService;
-        private readonly DataFetcherService _dataFetcherService = Substitute.For<DataFetcherService>();
+        private readonly DataFetcherService _dataFetcherService;
 
         public void Dispose()
         {
@@ -25,10 +25,11 @@ namespace PortfolioTracker.Tests
         {
             _logger = Substitute.For<ILogger<PortfolioService>>();
             var options = new DbContextOptionsBuilder<PortfolioTrackerContext>()
-            .UseInMemoryDatabase(databaseName: "TestPortfolioDb")
-            .Options;
-
+                .UseInMemoryDatabase(databaseName: "TestPortfolioDb")
+                .Options;
             _context = new PortfolioTrackerContext(options);
+            _dataFetcherService = new DataFetcherService(Substitute.For<ILogger<DataFetcherService>>(),
+                Substitute.For<IConfiguration>(), _context);
             _portfolioTickerService = new PortfolioTickerService(_context);
             _service = new PortfolioService(_logger, _context, _portfolioTickerService, _dataFetcherService);
         }
@@ -79,7 +80,7 @@ namespace PortfolioTracker.Tests
             Assert.Equal(0.075m, result.DividendYield);
             Assert.Equal(27.5m, result.ExpectedDividendAmount);
         }
-        
+
         [Fact]
         public async Task GetPortfolioById_ShouldReturnPortfolio_WhenPortfolioExists()
         {
@@ -122,14 +123,14 @@ namespace PortfolioTracker.Tests
             {
                 PortfolioName = "Test Portfolio",
                 TickerList = new List<PortfolioTickerDto>
+                {
+                    new PortfolioTickerDto
                     {
-                        new PortfolioTickerDto
-                        {
-                            AverageSharePrice = 100,
-                            NumberOfShares = 1,
-                            TickerSymbol = "A"
-                        }
+                        AverageSharePrice = 100,
+                        NumberOfShares = 1,
+                        TickerSymbol = "A"
                     }
+                }
             };
 
             //Act
@@ -147,20 +148,20 @@ namespace PortfolioTracker.Tests
             {
                 PortfolioName = "Test Portfolio",
                 TickerList = new List<PortfolioTickerDto>
+                {
+                    new PortfolioTickerDto
                     {
-                        new PortfolioTickerDto
-                        {
-                            AverageSharePrice = 100,
-                            NumberOfShares = 1,
-                            TickerSymbol = "A"
-                        },
-                        new PortfolioTickerDto
-                        {
-                            AverageSharePrice = 218.5m,
-                            NumberOfShares = 2,
-                            TickerSymbol = "AAPL"
-                        }
+                        AverageSharePrice = 100,
+                        NumberOfShares = 1,
+                        TickerSymbol = "A"
+                    },
+                    new PortfolioTickerDto
+                    {
+                        AverageSharePrice = 218.5m,
+                        NumberOfShares = 2,
+                        TickerSymbol = "AAPL"
                     }
+                }
             };
 
             //Act
@@ -178,14 +179,14 @@ namespace PortfolioTracker.Tests
             {
                 PortfolioName = "Test Portfolio",
                 TickerList = new List<PortfolioTickerDto>
+                {
+                    new PortfolioTickerDto
                     {
-                        new PortfolioTickerDto
-                        {
-                            AverageSharePrice = 69,
-                            NumberOfShares = 420,
-                            TickerSymbol = "XD"
-                        }
+                        AverageSharePrice = 69,
+                        NumberOfShares = 420,
+                        TickerSymbol = "XD"
                     }
+                }
             };
 
             //Act
@@ -368,20 +369,20 @@ namespace PortfolioTracker.Tests
         {
             // Arrange
             var portfolioDto = new List<PortfolioTickerDto>
+            {
+                new PortfolioTickerDto
                 {
-                    new PortfolioTickerDto
-                    {
-                        AverageSharePrice = 100,
-                        NumberOfShares = 10,
-                        TickerSymbol = "A"
-                    },
-                    new PortfolioTickerDto
-                    {
-                        AverageSharePrice = 200,
-                        NumberOfShares = 5,
-                        TickerSymbol = "B"
-                    }
-                };
+                    AverageSharePrice = 100,
+                    NumberOfShares = 10,
+                    TickerSymbol = "A"
+                },
+                new PortfolioTickerDto
+                {
+                    AverageSharePrice = 200,
+                    NumberOfShares = 5,
+                    TickerSymbol = "B"
+                }
+            };
 
             _context.tickers.AddRange(
                 new Ticker { TickerSymbol = "A", DividendYield = 0.05m, CompanyName = "Test" },
@@ -401,20 +402,20 @@ namespace PortfolioTracker.Tests
         {
             // Arrange
             var portfolioDto = new List<PortfolioTickerDto>
+            {
+                new PortfolioTickerDto
                 {
-                    new PortfolioTickerDto
-                    {
-                        AverageSharePrice = 100,
-                        NumberOfShares = 4,
-                        TickerSymbol = "A"
-                    },
-                    new PortfolioTickerDto
-                    {
-                        AverageSharePrice = 200,
-                        NumberOfShares = 3,
-                        TickerSymbol = "B"
-                    }
-                };
+                    AverageSharePrice = 100,
+                    NumberOfShares = 4,
+                    TickerSymbol = "A"
+                },
+                new PortfolioTickerDto
+                {
+                    AverageSharePrice = 200,
+                    NumberOfShares = 3,
+                    TickerSymbol = "B"
+                }
+            };
 
             _context.tickers.AddRange(
                 new Ticker { TickerSymbol = "A", DividendPerShare = 15.21m, CompanyName = "Test" },
@@ -434,20 +435,20 @@ namespace PortfolioTracker.Tests
         {
             // Arrange
             var portfolioDto = new List<PortfolioTickerDto>
+            {
+                new PortfolioTickerDto
                 {
-                    new PortfolioTickerDto
-                    {
-                        AverageSharePrice = 100,
-                        NumberOfShares = 10,
-                        TickerSymbol = "A"
-                    },
-                    new PortfolioTickerDto
-                    {
-                        AverageSharePrice = 200,
-                        NumberOfShares = 5,
-                        TickerSymbol = "B"
-                    }
-                };
+                    AverageSharePrice = 100,
+                    NumberOfShares = 10,
+                    TickerSymbol = "A"
+                },
+                new PortfolioTickerDto
+                {
+                    AverageSharePrice = 200,
+                    NumberOfShares = 5,
+                    TickerSymbol = "B"
+                }
+            };
 
             _context.tickers.AddRange(
                 new Ticker { TickerSymbol = "A", SharePrice = 110, CompanyName = "Test" },
@@ -461,5 +462,7 @@ namespace PortfolioTracker.Tests
             // Assert
             Assert.Equal(150, result);
         }
+        
+        
     }
 }

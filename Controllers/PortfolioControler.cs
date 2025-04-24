@@ -6,11 +6,11 @@ namespace PortfolioTracker.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class PortfolioControler : ControllerBase
+    public class PortfolioController : ControllerBase
     {
         private readonly PortfolioService _portfolioService;
 
-        public PortfolioControler(PortfolioService portfolioService)
+        public PortfolioController(PortfolioService portfolioService)
         {
             _portfolioService = portfolioService;
         }

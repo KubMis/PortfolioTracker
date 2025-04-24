@@ -249,7 +249,7 @@ namespace PortfolioTracker.Service
                 }
 
                 var existingTicker = portfolio.TickerList.FirstOrDefault(x => x.TickerSymbol == dto.TickerSymbol);
-                if (!(existingTicker == null))
+                if (existingTicker != null)
                 {
                     existingTicker.LastUpdateDate = DateTime.UtcNow;
                     existingTicker.NumberOfShares = dto.NumberOfShares;
