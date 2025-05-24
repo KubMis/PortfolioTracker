@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PortfolioTracker.Model;
+using PortfolioTracker.PortfolioTracker.Backend.Model;
 
-namespace PortfolioTracker.PortfolioDbContext
+namespace PortfolioTracker.PortfolioTracker.Backend.PortfolioDbContext
 {
     public class PortfolioTrackerContext : DbContext
     {

@@ -1,10 +1,9 @@
-﻿using PortfolioTracker.Model;
-using PortfolioTracker.PortfolioDbContext;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json.Nodes;
-using Microsoft.AspNetCore.Mvc;
+using PortfolioTracker.PortfolioTracker.Backend.Model;
+using PortfolioTracker.PortfolioTracker.Backend.PortfolioDbContext;
 
-namespace PortfolioTracker.Service
+namespace PortfolioTracker.PortfolioTracker.Backend.Service
 {
     public class DataFetcherService
     {

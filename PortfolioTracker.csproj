@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="PortfolioTracker.Frontend\" />
+    <Folder Include="PortfolioTracker.Frontend\portfolio-tracker-frontend\src\assets\" />
   </ItemGroup>
 
 </Project>

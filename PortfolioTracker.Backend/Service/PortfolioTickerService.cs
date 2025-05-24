@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PortfolioTracker.Model;
-using PortfolioTracker.PortfolioDbContext;
+﻿using PortfolioTracker.PortfolioTracker.Backend.Model;
+using PortfolioTracker.PortfolioTracker.Backend.PortfolioDbContext;
 
-namespace PortfolioTracker.Service
+namespace PortfolioTracker.PortfolioTracker.Backend.Service
 {
     public class PortfolioTickerService
     {
