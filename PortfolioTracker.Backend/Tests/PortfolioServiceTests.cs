@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NSubstitute;
-using PortfolioTracker.Model;
-using PortfolioTracker.PortfolioDbContext;
-using PortfolioTracker.Service;
+using PortfolioTracker.PortfolioTracker.Backend.Model;
+using PortfolioTracker.PortfolioTracker.Backend.PortfolioDbContext;
+using PortfolioTracker.PortfolioTracker.Backend.Service;
 using Xunit;
 
-namespace PortfolioTracker.Tests
+namespace PortfolioTracker.PortfolioTracker.Backend.Tests
 {
     public class PortfolioServiceTests : IDisposable
     {

@@ -1,4 +1,4 @@
-﻿namespace PortfolioTracker.Model
+﻿namespace PortfolioTracker.PortfolioTracker.Backend.Model
 {
     public class PortfolioDto
     {

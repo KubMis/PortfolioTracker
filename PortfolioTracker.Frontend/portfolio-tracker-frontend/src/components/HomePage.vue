@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section>
     <header>
       <h1>{{ msg }}</h1>
@@ -16,7 +16,7 @@
   </section>
 </template>
 
-<script>
+<script >
 export default {
   name: 'HelloWorld',
   props: {
@@ -26,7 +26,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2, p{
   text-align: center;

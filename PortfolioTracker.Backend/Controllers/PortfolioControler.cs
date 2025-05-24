@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PortfolioTracker.Model;
-using PortfolioTracker.Service;
+using PortfolioTracker.PortfolioTracker.Backend.Model;
+using PortfolioTracker.PortfolioTracker.Backend.Service;
 
-namespace PortfolioTracker.Controllers
+namespace PortfolioTracker.PortfolioTracker.Backend.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

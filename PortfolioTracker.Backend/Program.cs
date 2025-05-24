@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using PortfolioTracker.PortfolioDbContext;
-using PortfolioTracker.Service;
+using PortfolioTracker.PortfolioTracker.Backend.PortfolioDbContext;
+using PortfolioTracker.PortfolioTracker.Backend.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
