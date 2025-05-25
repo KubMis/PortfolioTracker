@@ -1,7 +1,6 @@
 # PortfolioTracker
 
-**PortfolioTracker** is a web application built with **.NET 8** that helps you manage your investment portfolios with ease. Create, update, and review your portfolios and their holdings all in one place.
-
+**PortfolioTracker** is a web application built with **.NET 8** and **Vue.js** that helps you manage your investment portfolios with ease. Create, update, and review your portfolios and their holdings all in one place.
 ## Features
 
 - 🆕 Create new investment portfolios  
