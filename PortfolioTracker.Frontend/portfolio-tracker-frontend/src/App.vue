@@ -2,33 +2,28 @@
   <header>
     <nav>
       <ul class="nav-list">
-        <li class="nav-item">🏠 Home</li>
-        <li class="nav-item">📁 Create Portfolio</li>
-        <li class="nav-item">📊 View Portfolio</li>
+        <li class="nav-item">
+          <router-link to="/">🏠 Home</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/create-portfolio">📁 Create Portfolio</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/view-portfolio">📊 View Portfolio</router-link>
+        </li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <HomePage msg="Welcome to the Portfolio Tracker App." :year="getCurrentYear()"/>
+    <router-view />
   </main>
 </template>
 
 <script>
-import HomePage from './components/HomePage.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HomePage
-  },
-  methods: {
-    getCurrentYear() {
-      return new Date().getFullYear();
-    }
-  }
+  name: 'App'
 }
-
 </script>
 
 <style>
@@ -62,19 +57,27 @@ header {
   display: inline-block;
   padding: 10px 20px;
   font-size: 18px;
-  color: #555;
-  text-decoration: none;
   border-right: 1px solid #ddd;
-  transition: color 0.3s;
 }
 
 .nav-item:last-child {
   border-right: none;
 }
 
-.nav-item:hover {
+.nav-item a {
+  color: #555;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-item a:hover {
   color: #42b983;
   cursor: pointer;
+}
+
+.router-link-active {
+  color: #42b983 !important;
+  font-weight: bold;
 }
 
 main {
@@ -82,5 +85,4 @@ main {
   padding: 20px;
   max-width: 800px;
 }
-
 </style>
